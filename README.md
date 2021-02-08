@@ -78,9 +78,9 @@
 
 
 ## Install Steps
-1. [istio 확인]()
-2. [kiali 설치]()
-3. [bookinfo 예제]()
+1. [istio 확인](https://github.com/tmax-cloud/install-kiali/blob/main/README.md#step-1-istio-%ED%99%95%EC%9D%B8)
+2. [kiali 설치](https://github.com/tmax-cloud/install-kiali/blob/main/README.md#step-2-kiali-%EC%84%A4%EC%B9%98)
+3. [bookinfo 예제](https://github.com/tmax-cloud/install-kiali/blob/main/README.md#step-3-bookinfo-%EC%98%88%EC%A0%9C)
 
 
 ## Step0. yaml 수정
