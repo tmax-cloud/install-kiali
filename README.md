@@ -78,9 +78,9 @@
 
 
 ## Install Steps
-1. [istio 확인](https://github.com/tmax-cloud/hypercloud-install-guide/tree/master/Istio#step-2-kiali-%EC%84%A4%EC%B9%98)
-2. [kiali 설치](https://github.com/tmax-cloud/hypercloud-install-guide/tree/master/Istio#step-2-kiali-%EC%84%A4%EC%B9%98)
-3. [bookinfo 예제](https://github.com/tmax-cloud/hypercloud-install-guide/tree/master/Istio#step-7-bookinfo-%EC%98%88%EC%A0%9C)
+1. [istio 확인]()
+2. [kiali 설치]()
+3. [bookinfo 예제]()
 
 
 ## Step0. yaml 수정
@@ -107,8 +107,11 @@
 
 ## Step 1. istio 확인
 * 목적 : `istio system namespace, pod 확인`
-* 생성 순서 : [1.istio-base.yaml](yaml/1.istio-base.yaml) 실행 `ex) kubectl apply -f 1.istio-base.yaml`
-
+* kubectl get ns monitoring - 네임스페이스 확인
+* kubectl get pod -n monitoring - pod 확인
+* 설치가 안되어 있다면 istio 설치를 참고하여 설치
+	* https://github.com/tmax-cloud/install-istio
+	
 
 
 ## Step 2. kiali 설치
