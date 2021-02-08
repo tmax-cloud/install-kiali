@@ -4,15 +4,23 @@ metadata:
   name: kiali-ingress
   namespace: istio-system
   annotations:
-    kubernetes.io/ingress.class: nginx-shd
+    kubernetes.io/ingress.class: ngi
 spec:
-  tls:
-  - secretName: kiali-https-secret
-  rules:
-  - host: kiali.istio-system
-  - http:
-      paths:
-      - path: /api/kiali
-        backend:
-          serviceName: kiali
-          servicePort: 20001
+    rules:
+    - host: kiali.istio-system.220.90.208.239.nip.io
+      http:
+        paths:
+        - backend:
+            serviceName: kiali
+            servicePort: 20001
+          path: /api/kiali
+          pathType: ImplementationSpecific
+    - http:
+        paths:
+        - backend:
+            serviceName: kiali
+            servicePort: 20001
+          path: /api/kiali
+          pathType: ImplementationSpecific
+    tls:
+    - secretName: kiali-https-secret
