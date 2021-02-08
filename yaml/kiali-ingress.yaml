@@ -4,7 +4,7 @@ metadata:
   name: kiali-ingress
   namespace: istio-system
   annotations:
-    kubernetes.io/ingress.class: ngi
+    kubernetes.io/ingress.class: nginx-shd
 spec:
     rules:
     - host: kiali.istio-system.220.90.208.239.nip.io
