@@ -83,7 +83,7 @@
 3. [bookinfo 예제](https://github.com/tmax-cloud/install-kiali/blob/main/README.md#step-3-bookinfo-%EC%98%88%EC%A0%9C)
 
 
-## Step0. yaml 수정
+## Step 0. yaml 수정
 * 목적 : `yaml에 이미지 registry, 버전 정보를 수정`
 * 생성 순서 : 
     * 아래의 command를 수정하여 사용하고자 하는 image 버전 정보를 수정한다.
