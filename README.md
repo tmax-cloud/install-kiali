@@ -1,5 +1,5 @@
 
-# Istio 설치 가이드
+# Kiali 설치 가이드
 
 ## 구성 요소 및 버전
 * kiali ([quay.io/kiali/kiali:v1.21](https://quay.io/repository/kiali/kiali?tab=tags))
