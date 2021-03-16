@@ -151,20 +151,3 @@
     * http://$PRODUCTPAGE_URL/productpage 에 접속해 정상적으로 배포되었는지 확인한 뒤, kiali dashboard(http://$KIALI_URL/kiali)에 접속해 아래 그림과 같이 서비스간에 관계를 표현해주는 그래프가 나오는지 확인한다.
 	
 ![image](figure/bookinfo-example.png)
-
-
-## 인증서 갱신 가이드
-
-1. 인증서 갱신을 위한 스크립트 파일을 다운로드 하고 권한을 설정해준다.
-    ```bash
-    $ wget https://raw.githubusercontent.com/istio/tools/release-1.8/bin/root-transition.sh
-    $ chmod +x root-transition.sh
-    ```
-2. 인증서 만료일을 확인한다.
-    ```bash
-    $ ./root-transition.sh check-root
-    ```
-3. 스크립트 파일을 이용하여 인증서를 갱신한다(10년 갱신).
-    ```bash
-    $ ./root-transition.sh root-transition
-    ```
