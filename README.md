@@ -44,9 +44,9 @@
     ```
     * install yaml을 다운로드한다.
     ```bash    
-    $ wget https://raw.githubusercontent.com/tmax-cloud/install-kiali/main/yaml/kiali.yaml
-    $ wget https://raw.githubusercontent.com/tmax-cloud/install-kiali/main/yaml/kiali-ingress.yaml
-    $ wget https://raw.githubusercontent.com/tmax-cloud/install-kiali/main/yaml/bookinfo.yaml    
+    $ wget https://raw.githubusercontent.com/tmax-cloud/install-kiali/5.0/yaml/kiali.yaml
+    $ wget https://raw.githubusercontent.com/tmax-cloud/install-kiali/5.0/yaml/kiali-ingress.yaml
+    $ wget https://raw.githubusercontent.com/tmax-cloud/install-kiali/5.0/yaml/bookinfo.yaml    
     ```
   
 2. 위의 과정에서 생성한 tar 파일들을 폐쇄망 환경으로 이동시킨 뒤 사용하려는 registry에 이미지를 push한다.
@@ -78,9 +78,9 @@
 
 
 ## Install Steps
-1. [istio 확인](https://github.com/tmax-cloud/install-kiali/blob/main/README.md#step-1-istio-%ED%99%95%EC%9D%B8)
-2. [kiali 설치](https://github.com/tmax-cloud/install-kiali/blob/main/README.md#step-2-kiali-%EC%84%A4%EC%B9%98)
-3. [bookinfo 예제](https://github.com/tmax-cloud/install-kiali/blob/main/README.md#step-3-bookinfo-%EC%98%88%EC%A0%9C)
+1. [istio 확인](https://github.com/tmax-cloud/install-kiali/blob/5.0/README.md#step-1-istio-%ED%99%95%EC%9D%B8)
+2. [kiali 설치](https://github.com/tmax-cloud/install-kiali/blob/5.0/README.md#step-2-kiali-%EC%84%A4%EC%B9%98)
+3. [bookinfo 예제](https://github.com/tmax-cloud/install-kiali/blob/5.0/README.md#step-3-bookinfo-%EC%98%88%EC%A0%9C)
 
 
 ## Step 0. yaml 수정
