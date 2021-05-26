@@ -183,7 +183,7 @@ data:
     auth:    
       strategy: "openid"
       openid:
-        client_id: "hypercloud4"
+        client_id: "hypercloud5"
         issuer_url: "https://{hyperauth_IP}/auth/realms/tmax"
         authorization_endpoint: "https://{hyperauth_IP}/auth/realms/tmax/protocol/openid-connect/auth"
     deployment:
