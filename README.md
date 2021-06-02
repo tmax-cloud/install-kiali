@@ -15,65 +15,12 @@
 ## 폐쇄망 설치 가이드
 설치를 진행하기 전 아래의 과정을 통해 필요한 이미지 및 yaml 파일을 준비한다.
 1. **폐쇄망에서 설치하는 경우** 사용하는 image repository에 istio 설치 시 필요한 이미지를 push한다. 
-
-    * 작업 디렉토리 생성 및 환경 설정
-    ```bash
-    $ mkdir -p ~/kiali-install
-    $ export KIALI_HOME=~/kiali-install    
-    $ export KIALI_VERSION=v1.21
-    $ export REGISTRY=[IP:PORT]
-    $ cd $KIALI_HOME
-    ```
-    * 외부 네트워크 통신이 가능한 환경에서 필요한 이미지를 다운받는다.
-    ```bash    
-    $ sudo docker pull quay.io/kiali/kiali:${KIALI_VERSION}
-    $ sudo docker save quay.io/kiali/kiali:${KIALI_VERSION} > kiali_${KIALI_VERSION}.tar
-    // bookinfo example images
-    $ sudo docker pull istio/examples-bookinfo-productpage-v1:1.15.0
-    $ sudo docker pull istio/examples-bookinfo-details-v1:1.15.0
-    $ sudo docker pull istio/examples-bookinfo-ratings-v1:1.15.0
-    $ sudo docker pull istio/examples-bookinfo-reviews-v1:1.15.0
-    $ sudo docker pull istio/examples-bookinfo-reviews-v2:1.15.0
-    $ sudo docker pull istio/examples-bookinfo-reviews-v3:1.15.0
-    $ sudo docker save istio/examples-bookinfo-productpage-v1:1.15.0 > productpage.tar
-    $ sudo docker save istio/examples-bookinfo-details-v1:1.15.0 > details.tar
-    $ sudo docker save istio/examples-bookinfo-ratings-v1:1.15.0 > ratings.tar
-    $ sudo docker save istio/examples-bookinfo-reviews-v1:1.15.0 > reviews-v1.tar
-    $ sudo docker save istio/examples-bookinfo-reviews-v2:1.15.0 > reviews-v2.tar
-    $ sudo docker save istio/examples-bookinfo-reviews-v3:1.15.0 > reviews-v3.tar
-    ```
-    * install yaml을 다운로드한다.
+    - [install-registry 이미지 푸시하기 참조](https://github.com/tmax-cloud/install-registry/blob/5.0/podman.md)
+2. install yaml을 다운로드한다.
     ```bash    
     $ wget https://raw.githubusercontent.com/tmax-cloud/install-kiali/5.0/yaml/kiali.yaml
     $ wget https://raw.githubusercontent.com/tmax-cloud/install-kiali/5.0/yaml/kiali-ingress.yaml
     $ wget https://raw.githubusercontent.com/tmax-cloud/install-kiali/5.0/yaml/bookinfo.yaml    
-    ```
-  
-2. 위의 과정에서 생성한 tar 파일들을 폐쇄망 환경으로 이동시킨 뒤 사용하려는 registry에 이미지를 push한다.
-    ```bash    
-    $ sudo docker load < kiali_${KIALI_VERSION}.tar
-    $ sudo docker load < productpage.tar
-    $ sudo docker load < details.tar
-    $ sudo docker load < ratings.tar
-    $ sudo docker load < reviews-v1.tar
-    $ sudo docker load < reviews-v2.tar
-    $ sudo docker load < reviews-v3.tar
-        
-    $ sudo docker tag quay.io/kiali/kiali:${KIALI_VERSION} ${REGISTRY}/kiali/kiali:${KIALI_VERSION}
-    $ sudo docker tag istio/examples-bookinfo-productpage-v1:1.15.0 ${REGISTRY}/istio/examples-bookinfo-productpage-v1:1.15.0
-    $ sudo docker tag istio/examples-bookinfo-details-v1:1.15.0 ${REGISTRY}/istio/examples-bookinfo-details-v1:1.15.0
-    $ sudo docker tag istio/examples-bookinfo-ratings-v1:1.15.0 ${REGISTRY}/istio/examples-bookinfo-ratings-v1:1.15.0
-    $ sudo docker tag istio/examples-bookinfo-reviews-v1:1.15.0 ${REGISTRY}/istio/examples-bookinfo-reviews-v1:1.15.0
-    $ sudo docker tag istio/examples-bookinfo-reviews-v2:1.15.0 ${REGISTRY}/istio/examples-bookinfo-reviews-v2:1.15.0
-    $ sudo docker tag istio/examples-bookinfo-reviews-v3:1.15.0 ${REGISTRY}/istio/examples-bookinfo-reviews-v3:1.15.0
-    
-    $ sudo docker push ${REGISTRY}/kiali/kiali:${KIALI_VERSION}
-    $ sudo docker push ${REGISTRY}/istio/examples-bookinfo-productpage-v1:1.15.0
-    $ sudo docker push ${REGISTRY}/istio/examples-bookinfo-details-v1:1.15.0
-    $ sudo docker push ${REGISTRY}/istio/examples-bookinfo-ratings-v1:1.15.0
-    $ sudo docker push ${REGISTRY}/istio/examples-bookinfo-reviews-v1:1.15.0
-    $ sudo docker push ${REGISTRY}/istio/examples-bookinfo-reviews-v2:1.15.0
-    $ sudo docker push ${REGISTRY}/istio/examples-bookinfo-reviews-v3:1.15.0
     ```
 
 
@@ -88,6 +35,7 @@
 * 생성 순서 : 
     * 아래의 command를 수정하여 사용하고자 하는 image 버전 정보를 수정한다.
 	```bash
+	$ export KIALI_VERSION=v1.21
 	$ sed -i 's/{kiali_version}/'${KIALI_VERSION}'/g' kiali.yaml	
 	```
     * 아래의 command로 hyperauth IP를 확인하고 수정하여 사용하고자 하는 hyperauth IP 정보를 수정한다.
