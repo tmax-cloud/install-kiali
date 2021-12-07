@@ -89,8 +89,8 @@ $ kubectl get pod -n monitoring # pod 확인
     * [kiali.yaml](yaml/kiali.yaml) 실행 `ex) kubectl apply -f kiali.yaml`
     * kilai pod가 running임을 확인한 뒤 http://$KIALI_URL/api/kiali 에 접속해 정상 동작을 확인한다.
 * 비고 :
-    * kiali에 접속하기 위한 서비스를 [원하는 타입](yaml/2.kiali.yaml#L346)으로 변경할 수 있다.
-    * kiali에 접속하기 위한 방식을 [strategy](yaml/2.kiali.yaml#L184)를 configmap을 수정해 변경할 수 있다.    
+    * kiali에 접속하기 위한 서비스를 [원하는 타입](yaml/kiali.yaml#L402)으로 변경할 수 있다.
+    * kiali에 접속하기 위한 방식을 [strategy](yaml/kiali.yaml#L35)를 configmap을 수정해 변경할 수 있다.    
     * hypercloud console 과 연동을 위해 kiali default web_root가 /kiali 에서 /api/kiali로 수정되었다.
 
 ![image](figure/kiali-ui.png)

@@ -399,6 +399,7 @@ metadata:
     app.kubernetes.io/managed-by: Helm
     app.kubernetes.io/part-of: "kiali"
 spec:
+  # type: NodePort
   ports:
     - name: http-kiali
       protocol: TCP
