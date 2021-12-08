@@ -1,3 +1,31 @@
+apiVersion: cert-manager.io/v1
+kind: Certificate
+metadata:
+  labels:
+    app.kubernetes.io/instance: traefik
+    app.kubernetes.io/managed-bu: tmax-cloud
+    app.kubernetes.io/name: api-gateway
+  name: kiali
+  namespace: istio-system
+spec:
+  secretName: kiali-secret
+  commonName: api-gateway
+  subject:
+    organizations:
+      - "tmax-cloud"
+  isCA: false
+  usages:
+    - digital signature
+    - key encipherment
+    - server auth
+    - client auth
+  dnsNames:
+    - "kaili.{DOMAIN}"
+  issuerRef:
+    kind: ClusterIssuer
+    group: cert-manager.io
+    name: tmaxcloud-issuer
+---
 # Source: kiali-server/templates/serviceaccount.yaml
 apiVersion: v1
 kind: ServiceAccount
