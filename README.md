@@ -51,13 +51,13 @@
 	$ export KEYCLOAK_ADDR={KEYCLOAK_ADDR}
     $ export CLIENT_ID={CLIENT_ID} # keycloak CLIENT_ID
     $ export CLIENT_SECRET={CLIENT_SECRET} # keycloak Client > kiali > Credentials > Secret 값
+      
     $ export DOMAIN={DOMAIN} # Hypercloud 주소
 
 	$ sed -i 's/{KIALI_VERSION}/'${KIALI_VERSION}'/g' kiali.yaml
 	$ sed -i 's/{KIALI_HELM_VERSION}/'${KIALI_HELM_VERSION}'/g' kiali.yaml
 	$ sed -i 's/{KEYCLOAK_ADDR}/'${KEYCLOAK_ADDR}'/g' kiali.yaml
 	$ sed -i 's/{CLIENT_ID}/'${CLIENT_ID}'/g' kiali.yaml
-	$ sed -i 's/{KEYCLOAK_ADDR}/'${KEYCLOAK_ADDR}'/g' kiali.yaml
 	$ sed -i 's/{CLIENT_SECRET}/'${CLIENT_SECRET}'/g' kiali.yaml
 	$ sed -i 's/{DOMAIN}/'${DOMAIN}'/g' kiali.yaml
 
