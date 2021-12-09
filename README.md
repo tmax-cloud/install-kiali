@@ -50,19 +50,20 @@
 	$ export KIALI_HELM_VERSION=1.38.0
 	$ export KEYCLOAK_ADDR={KEYCLOAK_ADDR}
     $ export CLIENT_ID={CLIENT_ID} # keycloak CLIENT_ID
-    $ export CLIENT_SECRET={CLIENT_SECRET} # keycloak Client > kiali > Credentials > Secret 값
-      
     $ export DOMAIN={DOMAIN} # Hypercloud 주소
-
+    $ export CLIENT_SECRET={CLIENT_SECRET} # keycloak Client > kiali > Credentials > Secret 값
+    	# 이 때, 시크릿은 base64 encoding 된 값이 들어가야 한다. 
+		# ($ echo -n "origin" |base64)
 	$ sed -i 's/{KIALI_VERSION}/'${KIALI_VERSION}'/g' kiali.yaml
 	$ sed -i 's/{KIALI_HELM_VERSION}/'${KIALI_HELM_VERSION}'/g' kiali.yaml
 	$ sed -i 's/{KEYCLOAK_ADDR}/'${KEYCLOAK_ADDR}'/g' kiali.yaml
 	$ sed -i 's/{CLIENT_ID}/'${CLIENT_ID}'/g' kiali.yaml
+	$ sed -i 's/{KEYCLOAK_ADDR}/'${KEYCLOAK_ADDR}'/g' kiali.yaml
 	$ sed -i 's/{CLIENT_SECRET}/'${CLIENT_SECRET}'/g' kiali.yaml
-	$ sed -i 's/{DOMAIN}/'${DOMAIN}'/g' kiali.yaml
-
-	```
-
+    $ sed -i 's/{DOMAIN}/'${DOMAIN}'/g' kiali.yaml
+	
+    ```
+    
 * 비고 :
     * `폐쇄망에서 설치를 진행하여 별도의 image registry를 사용하는 경우 registry 정보를 추가로 설정해준다.`
 	```bash
