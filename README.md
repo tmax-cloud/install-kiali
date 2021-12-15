@@ -2,7 +2,8 @@
 # Kiali 설치 가이드
 
 ## 구성 요소 및 버전
-* kiali ([quay.io/kiali/kiali:v1.38](https://quay.io/repository/kiali/kiali?tab=tags))
+* kiali ([quay.io/kiali/kiali:v1.21](https://quay.io/repository/kiali/kiali?tab=tags))
+
 
 ## Prerequisites
 
@@ -16,61 +17,12 @@
     $ wget https://raw.githubusercontent.com/tmax-cloud/install-kiali/5.0/yaml/kiali.yaml
     ```
 
+---
 
 ## Install Steps
-1. [keycloak 연동](https://github.com/tmax-cloud/install-kiali/tree/5.0#step-0-keycloak-%EC%97%B0%EB%8F%99)
-2. [YAML 수정](https://github.com/tmax-cloud/install-kiali/tree/5.0#step-1-yaml-%EC%88%98%EC%A0%95)
-3. [istio 확인](https://github.com/tmax-cloud/install-kiali/tree/5.0#step-2-istio-%ED%99%95%EC%9D%B8)
-4. [kiali 설치](https://github.com/tmax-cloud/install-kiali/tree/5.0#step-3-kiali-%EC%84%A4%EC%B9%98)
 
-## Step 0. Keycloak 연동
+## 0]. istio 확인
 
-* 목적 : `Keycloak 연동`
-
-* 생성 순서 :
-
-  * Keycloak Client 생성
-
-    ![image](figure/keycloak.png)
-
-    - `Root URL = https://${DOMAIN}/api/kiali`
-
-    - `Valid Redirect URIs = * `
-
-
-
-## Step 1. yaml 수정
-
-* 목적 : `yaml에 이미지 , registry 정보를 수정`
-
-* 생성 순서 :
-    * 아래의 command를 수정하여 사용하고자 하는 버전 정보를 수정한다.
-	```bash
-	$ export KIALI_VERSION=1.38
-	$ export KIALI_HELM_VERSION=1.38.0
-	$ export KEYCLOAK_ADDR={KEYCLOAK_ADDR}
-    $ export CLIENT_ID={CLIENT_ID} # keycloak CLIENT_ID
-    $ export DOMAIN={DOMAIN} # Hypercloud 주소
-    $ export CLIENT_SECRET={CLIENT_SECRET} # keycloak Client > kiali > Credentials > Secret 값
-    # 이 때, 시크릿은 base64 encoding 된 값이 들어가야 한다. 
-	# ($ echo -n "origin" |base64)
-	$ sed -i 's/{KIALI_VERSION}/'${KIALI_VERSION}'/g' kiali.yaml
-	$ sed -i 's/{KIALI_HELM_VERSION}/'${KIALI_HELM_VERSION}'/g' kiali.yaml
-	$ sed -i 's/{KEYCLOAK_ADDR}/'${KEYCLOAK_ADDR}'/g' kiali.yaml
-	$ sed -i 's/{CLIENT_ID}/'${CLIENT_ID}'/g' kiali.yaml
-	$ sed -i 's/{CLIENT_SECRET}/'${CLIENT_SECRET}'/g' kiali.yaml
-    $ sed -i 's/{DOMAIN}/'${DOMAIN}'/g' kiali.yaml
-	
-    ```
-    
-* 비고 :
-    * `폐쇄망에서 설치를 진행하여 별도의 image registry를 사용하는 경우 registry 정보를 추가로 설정해준다.`
-	```bash
-	$ sed -i 's/quay.io\/kiali\/kiali/'${REGISTRY}'\/kiali\/kiali/g' kiali.yaml
-	$ sed -i 's/docker.io/'${REGISTRY}'/g' bookinfo.yaml
-	```
-
-## Step 2. istio 확인
 * 목적 : `istio system namespace, pod 확인`
 
 ```bash
@@ -81,16 +33,53 @@ $ kubectl get pod -n monitoring # pod 확인
 * 설치가 안되어 있다면 istio 설치를 참고하여 설치
   * https://github.com/tmax-cloud/install-istio
 
+---
+
+## 1. KEYCLOAK 연동
+
+1. client 생성
+   - 필요 설정
+     - Implicit Flow Enabled (ON)
+     - Access Type: confidential
+     - valid Redirect URIs : *
+
+![image](figure/1-client.png)
+
+2. Client-Client Scopes 설정
+   - Available Client Scopes에 있는 kubernetes 선택 및 Add selected
+
+![image](figure/2-clientScope.png)
+
+---
+
+## 2. kiali.config 설정 ([파일](./kiali.config))
+
+   ```config
+   kialiVersion=v1.21
+   hyperAuthIP='' # 키클록 URL ex) hyperauth.tmaxcloud.org
+   clientId='' # 키클록 클라이언트 이름 ex) kiali
+   customDomainName='' # 도메인 ex) tmaxcloud.org
+   ```
+
+---
+
+## 3. Installer 실행
+
+* 목적 : `kiali 설치 실행 `
+
+* 생성 순서 : 아래 command로 설치 yaml 적용
+   ```bash
+   $ chmod +x installer.sh
+   $ ./installer.sh install
+   ```
+
+### 삭제 가이드
+
+```bash
+$ chmod +x installer.sh
+$ ./installer.sh uninstall
+```
 
 
-## Step 3. kiali 설치
-* 목적 : `istio ui kiali 설치`
-* 생성 순서:
-    * [kiali.yaml](yaml/kiali.yaml) 실행 `ex) kubectl apply -f kiali.yaml`
-    * kilai pod가 running임을 확인한 뒤 http://$KIALI_URL/api/kiali 에 접속해 정상 동작을 확인한다.
-* 비고 :
-    * kiali에 접속하기 위한 서비스를 [원하는 타입](yaml/kiali.yaml#L402)으로 변경할 수 있다.
-    * kiali에 접속하기 위한 방식을 [strategy](yaml/kiali.yaml#L35)를 configmap을 수정해 변경할 수 있다.    
-    * hypercloud console 과 연동을 위해 kiali default web_root가 /kiali 에서 /api/kiali로 수정되었다.
 
 ![image](figure/kiali-ui.png)
