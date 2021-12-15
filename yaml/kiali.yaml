@@ -62,6 +62,7 @@ data:
     auth:
       strategy: openid
       openid:
+        insecure_skip_verfiy_tls: true
         client_id: "{CLIENT_ID}"
         disable_rbac: true
         issuer_uri: "https://{KEYCLOAK_ADDR}/auth/realms/tmax"
