@@ -30,7 +30,7 @@ function uninstall(){
   echo  "======================  Start Uninstalling kiali ======================="
   echo  "========================================================================="
 
-  kubectl delete -f "$install_dir/yaml/.kialiyaml"
+  kubectl delete -f "$install_dir/yaml/kiali_modified.yaml"
 
   echo  "========================================================================="
   echo  "===================  Successfully Uninstalled kiali ===================="
