@@ -358,7 +358,6 @@ spec:
   tls:
   - hosts:
       - kiali.{CUSTOM_DOMAIN_NAME}
-    secretName: kiali-https-secret
   rules:
   - host: kiali.{CUSTOM_DOMAIN_NAME}
     http:
