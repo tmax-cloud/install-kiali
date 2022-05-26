@@ -1,7 +1,15 @@
 
 # Kiali 설치 가이드
 
+## 개요
+
+- Service mesh(istio) topology 및 트래픽 관리를 시각화한다.
+- Mesh, Cluster, Network, Workload에 기반한 topology Graph, UI를 통한 트래픽 테스트, Envoy config/Log, Jaeger Integration 등 Service Mesh 시각화를 제공한다.
+
+목목적과 기능 
+
 ## 구성 요소 및 버전
+
 * kiali ([quay.io/kiali/kiali:v1.21](https://quay.io/repository/kiali/kiali?tab=tags))
 
 
