@@ -27,7 +27,7 @@
 
 ## Install Steps
 
-## 0]. istio 확인
+## 0. istio 확인
 
 * 목적 : `istio system namespace, pod 확인`
 
