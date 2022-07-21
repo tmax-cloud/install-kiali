@@ -89,3 +89,24 @@ $ ./installer.sh uninstall
 
 
 ![image](figure/kiali-ui.png)
+
+
+
+## Log level 설정 가이드
+
+Deployment command의 verbose를 조정한다.
+
+- 3: default(info , [info,warn,error,fatal])
+- 4: debug
+- 5: trace
+
+```yaml
+containers:
+- command:
+	- /opt/kiali/kiali
+	- -config
+	- /kiali-configuration/config.yaml
+	- -v
+	- "3" # info
+```
+
