@@ -103,10 +103,10 @@ Deployment command의 verbose를 조정한다.
 ```yaml
 containers:
 - command:
-	- /opt/kiali/kiali
-	- -config
-	- /kiali-configuration/config.yaml
-	- -v
-	- "3" # info
+    - /opt/kiali/kiali
+    - -config
+    - /kiali-configuration/config.yaml
+    - -v
+    - "3" # info
 ```
 
