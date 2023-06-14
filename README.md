@@ -64,10 +64,11 @@ $ kubectl get pod -n monitoring # pod 확인
 ## 2. kiali.config 설정 ([파일](./kiali.config))
 
    ```config
-   kialiVersion=v1.21
+   kialiVersion=v1.59.0
    hyperAuthIP='' # 키클록 URL ex) hyperauth.tmaxcloud.org
    clientId='' # 키클록 클라이언트 이름 ex) kiali
    customDomainName='' # 도메인 ex) tmaxcloud.org
+   kialiLoglevel=info # ex) trace, debug, info, warn, error, fatal
    ```
 
 ---
@@ -94,26 +95,51 @@ $ ./installer.sh uninstall
 ![image](figure/kiali-ui.png)
 
 
-
-## Log level 설정 가이드
-
-Deployment command의 verbose를 조정한다.
-
-- 3: default(info , [info,warn,error,fatal])
-- 4: debug
-- 5: trace
-
-```yaml
-containers:
-- command:
-    - /opt/kiali/kiali
-    - -config
-    - /kiali-configuration/config.yaml
-    - -v
-    - "3" # info
+## Example Test: bookinfo 예제
+* 목적: istio 및 kiali 설치 검증을 위한 bookinfo 예제
+### 1. bookinfo yaml 배포
+* bookinfo 예제를 배포할 namespace를 만들고, istio-injection=enable label 추가 후 bookinfo 예제를 배포한다.
+```bash
+$ kubectl create ns bookinfo
+$ kubectl label ns bookinfo istio-injection=enabled
+$ kubectl apply -f bookinfo.yaml -n bookinfo
 ```
+### 2. bookinfo gateway, virtual service 설정
+* istio-ingressgateway를 통해 들어올 트래픽의 진입점을 gateway로 설정하고,<br/>
+해당 gateway에서 라우팅할 서비스 endpoint를 virtual service를 통해 등록한다.
+```bash
+$ kubectl apply -f bookinfo-gateway.yaml -n bookinfo
+$ kubectl apply -f bookinfo-virtualservice.yaml -n bookinfo
+$ kubectl get virtualservice -n bookinfo 
+
+NAME       GATEWAYS               HOSTS                    AGE
+bookinfo   ["bookinfo-gateway"]   ["bookinfo.demo.test"]   21m
+```
+### 3. bookinfo 호출
+* curl 커맨드를 통해 bookinfo 예제를 호출하여 트래픽을 생성한다. <br/>
+(istio sampling 설정에 따라 반복 호출이 필요할 수도 있다.)
+```bash
+$ curl -H "Host: bookinfo.demo.test" http://YOUR_INGRESSGATEWAY_ADDR/productpage
+```
+### 4. 검증
+* 정상적으로 호출되어 트래픽이 발생했다면 아래와 같은 화면을 볼 수 있다.
+
+![image](figure/kiali-overview.png)
+![image](figure/kiali-graph.png)
+
+이를 통해 해당 트래픽에 대한 topology를 확인할 수 있다.
 
 ## External Service와 연동 (jaeger, grafana)
 kiali configMap의 필드값 변경으로 external service들과 kiali를 연동할 수 있다.
-
+#### 기본값
+```yaml
+      tracing:
+        url:
+        in_cluster_url: http://jaeger-query.istio-system.svc:16685
+      grafana:
+        url:
+        in_cluster_url: http://grafana.monitoring:3000
+      prometheus:
+        url: http://prometheus-k8s.monitoring:9090
+```
 
