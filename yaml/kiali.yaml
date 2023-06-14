@@ -385,8 +385,8 @@ spec:
       - configMap:
           name: kiali
           items:
-            key: config.yaml
-            path: config.yaml
+            - key: config.yaml
+              path: config.yaml
         name: kiali-configuration
       - name: kiali-cert
         secret:
