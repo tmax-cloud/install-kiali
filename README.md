@@ -45,7 +45,7 @@
 
 ```bash
 $ kubectl get ns istio-system # 네임스페이스 확인
-$ kubectl get pod -n monitoring # pod 확인
+$ kubectl get pod -n istio-system # pod 확인
 ```
 
 * 설치가 안되어 있다면 istio 설치를 참고하여 설치
