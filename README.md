@@ -9,6 +9,13 @@
 ## 구성 요소 및 버전
 
 * kiali ([quay.io/kiali/kiali:v1.59.0](https://quay.io/repository/kiali/kiali?tab=tags))
+* bookinfo example (optional)
+  * productpage([docker.io/istio/examples-bookinfo-productpage-v1:1.15.0](https://hub.docker.com/layers/istio/examples-bookinfo-productpage-v1/1.15.0/images/sha256-0a5eb4795952372251d51f72834bccb7ea01a67cb72fd9b58b757cca103b7524?context=explore))
+  * details([docker.io/istio/examples-bookinfo-details-v1:1.15.0](https://hub.docker.com/layers/istio/examples-bookinfo-details-v1/1.15.0/images/sha256-fce0bcbff0bed09116dacffca15695cd345e0c3788c15b0114a05f654ddecc17?context=explore))
+  * ratings([docker.io/istio/examples-bookinfo-ratings-v1:1.15.0](https://hub.docker.com/layers/istio/examples-bookinfo-ratings-v1/1.15.0/images/sha256-09b9d6958a13ad1a97377b7d5c2aa9e0372c008cdf5a44ce3e72fbd9660936cf?context=explore))
+  * reviews-v1([docker.io/istio/examples-bookinfo-reviews-v1:1.15.0](https://hub.docker.com/layers/istio/examples-bookinfo-reviews-v1/1.15.0/images/sha256-40e8aba77c1b46f37e820a60aa6948485d39e6f55f1492fa1f17383efd95511c?context=explore))
+  * reviews-v2([docker.io/istio/examples-bookinfo-reviews-v2:1.15.0](https://hub.docker.com/layers/istio/examples-bookinfo-reviews-v2/1.15.0/images/sha256-e86d247b7ac275eb681a7e9c869325762686ccf0b5cfb6bde100ff2c1f01ae2b?context=explore))
+  * reviews-v3([docker.io/istio/examples-bookinfo-reviews-v3:1.15.0](https://hub.docker.com/layers/istio/examples-bookinfo-reviews-v3/1.15.0/images/sha256-e454cab754cf9234e8b41d7c5e30f53a4c125d7d9443cb3ef2b2eb1c4bd1ec14?context=explore))
 
 ## Prerequisites
 
@@ -23,7 +30,10 @@
 2. install yaml을 다운로드한다.
     ```bash    
     $ wget https://raw.githubusercontent.com/tmax-cloud/install-kiali/5.2/yaml/kiali.yaml
-    ```
+    $ wget https://raw.githubusercontent.com/tmax-cloud/install-kiali/5.2/bookinfo/bookinfo.yaml
+    $ wget https://raw.githubusercontent.com/tmax-cloud/install-kiali/5.2/bookinfo/bookinfo-gateway.yaml
+    $ wget https://raw.githubusercontent.com/tmax-cloud/install-kiali/5.2/bookinfo/bookinfo-virtualservice.yaml
+   ```
 
 ---
 
@@ -102,14 +112,14 @@ $ ./installer.sh uninstall
 ```bash
 $ kubectl create ns bookinfo
 $ kubectl label ns bookinfo istio-injection=enabled
-$ kubectl apply -f bookinfo.yaml -n bookinfo
+$ kubectl apply -f bookinfo/bookinfo.yaml -n bookinfo
 ```
 ### 2. bookinfo gateway, virtual service 설정
 * istio-ingressgateway를 통해 들어올 트래픽의 진입점을 gateway로 설정하고,<br/>
 해당 gateway에서 라우팅할 서비스 endpoint를 virtual service를 통해 등록한다.
 ```bash
-$ kubectl apply -f bookinfo-gateway.yaml -n bookinfo
-$ kubectl apply -f bookinfo-virtualservice.yaml -n bookinfo
+$ kubectl apply -f bookinfo/bookinfo-gateway.yaml -n bookinfo
+$ kubectl apply -f bookinfo/bookinfo-virtualservice.yaml -n bookinfo
 $ kubectl get virtualservice -n bookinfo 
 
 NAME       GATEWAYS               HOSTS                    AGE
