@@ -16,6 +16,7 @@ function install(){
   sed -i 's/{HYPERAUTH_IP}/'$hyperAuthIP'/g' "$install_dir/yaml/kiali_modified.yaml"
   sed -i "s/{CLIENT_ID}/$clientId/g" "$install_dir/yaml/kiali_modified.yaml"
   sed -i 's/{CUSTOM_DOMAIN_NAME}/'$customDomainName'/g' "$install_dir/yaml/kiali_modified.yaml"
+  sed -i 's/{KIALI_LOG_LEVEL}/'$kialiLoglevel'/g' "$install_dir/yaml/kiali_modified.yaml"
 
 
   kubectl apply -f "$install_dir/yaml/kiali_modified.yaml"

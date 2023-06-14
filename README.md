@@ -8,10 +8,12 @@
 
 ## 구성 요소 및 버전
 
-* kiali ([quay.io/kiali/kiali:v1.21](https://quay.io/repository/kiali/kiali?tab=tags))
-
+* kiali ([quay.io/kiali/kiali:v1.59.0](https://quay.io/repository/kiali/kiali?tab=tags))
 
 ## Prerequisites
+
+* 필수 모듈
+  * [istio](https://github.com/tmax-cloud/install-istio/tree/5.2)
 
 ## 폐쇄망 설치 가이드
 설치를 진행하기 전 아래의 과정을 통해 필요한 이미지 및 yaml 파일을 준비한다.
@@ -20,7 +22,7 @@
     - [install-registry 이미지 푸시하기 참조](https://github.com/tmax-cloud/install-registry/blob/5.0/podman.md)
 2. install yaml을 다운로드한다.
     ```bash    
-    $ wget https://raw.githubusercontent.com/tmax-cloud/install-kiali/5.0/yaml/kiali.yaml
+    $ wget https://raw.githubusercontent.com/tmax-cloud/install-kiali/5.2/yaml/kiali.yaml
     ```
 
 ---
@@ -38,6 +40,7 @@ $ kubectl get pod -n monitoring # pod 확인
 
 * 설치가 안되어 있다면 istio 설치를 참고하여 설치
   * https://github.com/tmax-cloud/install-istio
+  * 5.2 브랜치에서 설치되는 kiali 버전은 v1.59.0으로 istio 1.15에 호환되기 때문에 알맞은 istio 버전을 설치하여야 한다. 이 [링크](https://kiali.io/docs/installation/installation-guide/prerequisites/)를 통해 호환 버전을 확인할 수 있다.
 
 ---
 
@@ -109,4 +112,8 @@ containers:
     - -v
     - "3" # info
 ```
+
+## External Service와 연동 (jaeger, grafana)
+kiali configMap의 필드값 변경으로 external service들과 kiali를 연동할 수 있다.
+
 
