@@ -8,10 +8,19 @@
 
 ## 구성 요소 및 버전
 
-* kiali ([quay.io/kiali/kiali:v1.21](https://quay.io/repository/kiali/kiali?tab=tags))
-
+* kiali ([quay.io/kiali/kiali:v1.59.0](https://quay.io/repository/kiali/kiali?tab=tags))
+* bookinfo example (optional)
+  * productpage([docker.io/istio/examples-bookinfo-productpage-v1:1.15.0](https://hub.docker.com/layers/istio/examples-bookinfo-productpage-v1/1.15.0/images/sha256-0a5eb4795952372251d51f72834bccb7ea01a67cb72fd9b58b757cca103b7524?context=explore))
+  * details([docker.io/istio/examples-bookinfo-details-v1:1.15.0](https://hub.docker.com/layers/istio/examples-bookinfo-details-v1/1.15.0/images/sha256-fce0bcbff0bed09116dacffca15695cd345e0c3788c15b0114a05f654ddecc17?context=explore))
+  * ratings([docker.io/istio/examples-bookinfo-ratings-v1:1.15.0](https://hub.docker.com/layers/istio/examples-bookinfo-ratings-v1/1.15.0/images/sha256-09b9d6958a13ad1a97377b7d5c2aa9e0372c008cdf5a44ce3e72fbd9660936cf?context=explore))
+  * reviews-v1([docker.io/istio/examples-bookinfo-reviews-v1:1.15.0](https://hub.docker.com/layers/istio/examples-bookinfo-reviews-v1/1.15.0/images/sha256-40e8aba77c1b46f37e820a60aa6948485d39e6f55f1492fa1f17383efd95511c?context=explore))
+  * reviews-v2([docker.io/istio/examples-bookinfo-reviews-v2:1.15.0](https://hub.docker.com/layers/istio/examples-bookinfo-reviews-v2/1.15.0/images/sha256-e86d247b7ac275eb681a7e9c869325762686ccf0b5cfb6bde100ff2c1f01ae2b?context=explore))
+  * reviews-v3([docker.io/istio/examples-bookinfo-reviews-v3:1.15.0](https://hub.docker.com/layers/istio/examples-bookinfo-reviews-v3/1.15.0/images/sha256-e454cab754cf9234e8b41d7c5e30f53a4c125d7d9443cb3ef2b2eb1c4bd1ec14?context=explore))
 
 ## Prerequisites
+
+* 필수 모듈
+  * [istio](https://github.com/tmax-cloud/install-istio/tree/5.2)
 
 ## 폐쇄망 설치 가이드
 설치를 진행하기 전 아래의 과정을 통해 필요한 이미지 및 yaml 파일을 준비한다.
@@ -20,8 +29,11 @@
     - [install-registry 이미지 푸시하기 참조](https://github.com/tmax-cloud/install-registry/blob/5.0/podman.md)
 2. install yaml을 다운로드한다.
     ```bash    
-    $ wget https://raw.githubusercontent.com/tmax-cloud/install-kiali/5.0/yaml/kiali.yaml
-    ```
+    $ wget https://raw.githubusercontent.com/tmax-cloud/install-kiali/5.2/yaml/kiali.yaml
+    $ wget https://raw.githubusercontent.com/tmax-cloud/install-kiali/5.2/bookinfo/bookinfo.yaml
+    $ wget https://raw.githubusercontent.com/tmax-cloud/install-kiali/5.2/bookinfo/bookinfo-gateway.yaml
+    $ wget https://raw.githubusercontent.com/tmax-cloud/install-kiali/5.2/bookinfo/bookinfo-virtualservice.yaml
+   ```
 
 ---
 
@@ -38,6 +50,7 @@ $ kubectl get pod -n monitoring # pod 확인
 
 * 설치가 안되어 있다면 istio 설치를 참고하여 설치
   * https://github.com/tmax-cloud/install-istio
+  * 5.2 브랜치에서 설치되는 kiali 버전은 v1.59.0으로 istio 1.15에 호환되기 때문에 알맞은 istio 버전을 설치하여야 한다. 이 [링크](https://kiali.io/docs/installation/installation-guide/prerequisites/)를 통해 호환 버전을 확인할 수 있다.
 
 ---
 
@@ -61,10 +74,11 @@ $ kubectl get pod -n monitoring # pod 확인
 ## 2. kiali.config 설정 ([파일](./kiali.config))
 
    ```config
-   kialiVersion=v1.21
+   kialiVersion=v1.59.0
    hyperAuthIP='' # 키클록 URL ex) hyperauth.tmaxcloud.org
    clientId='' # 키클록 클라이언트 이름 ex) kiali
    customDomainName='' # 도메인 ex) tmaxcloud.org
+   kialiLoglevel=info # ex) trace, debug, info, warn, error, fatal
    ```
 
 ---
@@ -91,22 +105,51 @@ $ ./installer.sh uninstall
 ![image](figure/kiali-ui.png)
 
 
+## Example Test: bookinfo 예제
+* 목적: istio 및 kiali 설치 검증을 위한 bookinfo 예제
+### 1. bookinfo yaml 배포
+* bookinfo 예제를 배포할 namespace를 만들고, istio-injection=enable label 추가 후 bookinfo 예제를 배포한다.
+```bash
+$ kubectl create ns bookinfo
+$ kubectl label ns bookinfo istio-injection=enabled
+$ kubectl apply -f bookinfo/bookinfo.yaml -n bookinfo
+```
+### 2. bookinfo gateway, virtual service 설정
+* istio-ingressgateway를 통해 들어올 트래픽의 진입점을 gateway로 설정하고,<br/>
+해당 gateway에서 라우팅할 서비스 endpoint를 virtual service를 통해 등록한다.
+```bash
+$ kubectl apply -f bookinfo/bookinfo-gateway.yaml -n bookinfo
+$ kubectl apply -f bookinfo/bookinfo-virtualservice.yaml -n bookinfo
+$ kubectl get virtualservice -n bookinfo 
 
-## Log level 설정 가이드
+NAME       GATEWAYS               HOSTS                    AGE
+bookinfo   ["bookinfo-gateway"]   ["bookinfo.demo.test"]   21m
+```
+### 3. bookinfo 호출
+* curl 커맨드를 통해 bookinfo 예제를 호출하여 트래픽을 생성한다. <br/>
+(istio sampling 설정에 따라 반복 호출이 필요할 수도 있다.)
+```bash
+$ curl -H "Host: bookinfo.demo.test" http://YOUR_INGRESSGATEWAY_ADDR/productpage
+```
+### 4. 검증
+* 정상적으로 호출되어 트래픽이 발생했다면 아래와 같은 화면을 볼 수 있다.
 
-Deployment command의 verbose를 조정한다.
+![image](figure/kiali-overview.png)
+![image](figure/kiali-graph.png)
 
-- 3: default(info , [info,warn,error,fatal])
-- 4: debug
-- 5: trace
+이를 통해 해당 트래픽에 대한 topology를 확인할 수 있다.
 
+## External Service와 연동 (jaeger, grafana)
+kiali configMap의 필드값 변경으로 external service들과 kiali를 연동할 수 있다.
+#### 기본값
 ```yaml
-containers:
-- command:
-    - /opt/kiali/kiali
-    - -config
-    - /kiali-configuration/config.yaml
-    - -v
-    - "3" # info
+      tracing:
+        url:
+        in_cluster_url: http://jaeger-query.istio-system.svc:16685
+      grafana:
+        url:
+        in_cluster_url: http://grafana.monitoring:3000
+      prometheus:
+        url: http://prometheus-k8s.monitoring:9090
 ```
 
