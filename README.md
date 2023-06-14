@@ -129,7 +129,8 @@ bookinfo   ["bookinfo-gateway"]   ["bookinfo.demo.test"]   21m
 * curl 커맨드를 통해 bookinfo 예제를 호출하여 트래픽을 생성한다. <br/>
 (istio sampling 설정에 따라 반복 호출이 필요할 수도 있다.)
 ```bash
-$ curl -H "Host: bookinfo.demo.test" http://YOUR_INGRESSGATEWAY_ADDR/productpage
+$ kubectl get svc -n istio-system
+$ curl -H "Host: bookinfo.demo.test" http://YOUR_ISTIO_INGRESSGATEWAY_ADDR/productpage
 ```
 ### 4. 검증
 * 정상적으로 호출되어 트래픽이 발생했다면 아래와 같은 화면을 볼 수 있다.
