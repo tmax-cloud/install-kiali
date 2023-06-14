@@ -248,12 +248,14 @@ data:
     external_services:
       istio:
         root_namespace: istio-system
-        components:
-          - app_label: istiod
-            is_core: true
-          - app_label: ingressgateway
-            is_core: true
-            is_proxy: true
+        component_status:
+          enabled: true
+          components:
+            - app_label: istiod
+              is_core: true
+            - app_label: ingressgateway
+              is_core: true
+              is_proxy: true
         url_service_version: http://istiod.istio-system.svc:15014/version
       tracing:
         url:
@@ -348,6 +350,11 @@ spec:
               fieldPath: metadata.namespace
         - name: LOG_LEVEL
           value: {KIALI_LOG_LEVEL}
+        ports:
+          - name: api-port
+            containerPort: 20001
+          - name: http-metrics
+            containerPort: 9090
         image: quay.io/kiali/kiali:{KIALI_VERSION}
         imagePullPolicy: IfNotPresent
         livenessProbe:
